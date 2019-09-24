@@ -1,0 +1,3 @@
+[submodule "lib/rails-backend"]
+	path = lib/rails-backend
+	url = git@github.com:the-spectator/Notes-Rails.git
