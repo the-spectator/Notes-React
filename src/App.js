@@ -1,25 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import LoginFormComponent from './components/LoginFormComponent';
+import { Container, Row, Col, Card, CardBody, CardHeader } from 'reactstrap';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container fluid={true} className="h-100">
+      <Row className="justify-content-center align-items-center h-100">
+        <Col md="6" sm="6" lg="4" xl="3">
+          <Card>
+            <CardHeader>
+              SignIn
+            </CardHeader>
+            <CardBody>
+              <LoginFormComponent/>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 
