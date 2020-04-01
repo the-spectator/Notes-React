@@ -1,9 +1,22 @@
 import React from 'react';
 import { Label, Form, FormGroup, Button, Input } from 'reactstrap';
+import * as yup from 'yup'; // for everything
+
+let schema = yup.object().shape({
+  email: yup.string().email(),
+  password: yup.string().required(),
+});
+
+const checkValidity = (e) => {
+  debugger;
+  schema.isValid({
+    name: e.target
+  }).then((valid) => { console.log(valid); } )
+};
 
 const LoginFormComponent = (props) => {
   return(
-    <Form>
+    <Form onSubmit={checkValidity}>
       <FormGroup>
         <Label for="email">Email</Label>
         <Input type="email" id="email" name="email" placeholder="Enter Email" />
