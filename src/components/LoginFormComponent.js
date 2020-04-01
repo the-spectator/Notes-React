@@ -7,29 +7,28 @@ let schema = yup.object().shape({
   password: yup.string().required(),
 });
 
-const initialState = { email: '', password: '' };
-
 function reducer(state, action) {
   switch (action.type) {
     case 'setEmail':
-      return {email: action.value};
+      return { email: action.value };
     case 'setPassword':
-      return {password: action.value};
+      return { password: action.value };
     default:
       throw new Error();
   }
 }
 
-const checkValidity = (state, e) => {
-  // debugger;
-  schema.isValid(state).then((valid) => { console.log(valid); } )
-};
-
 const LoginFormComponent = (props) => {
+  const initialState = { email: '', password: '' };
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const checkValidity = (e) => {
+    e.preventDefault();
+    schema.isValid(state).then((valid) => { console.log(valid); } )
+  };
+
   return(
-    <Form onSubmit={checkValidity(state)}>
+    <Form onSubmit={checkValidity}>
       <FormGroup>
         <Label for="email">Email</Label>
         <Input
