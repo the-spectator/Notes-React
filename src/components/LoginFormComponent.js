@@ -1,34 +1,11 @@
-import React, { useReducer } from 'react';
-import { Label, Form, FormGroup, Button, Input } from 'reactstrap';
-import * as yup from 'yup'; // for everything
-
-let schema = yup.object().shape({
-  email: yup.string().email(),
-  password: yup.string().required(),
-});
-
-function reducer(state, action) {
-  switch (action.type) {
-    case 'setEmail':
-      return { email: action.value };
-    case 'setPassword':
-      return { password: action.value };
-    default:
-      throw new Error();
-  }
-}
+import React from 'react';
+import { Label, Form, FormGroup, Button, Input, FormFeedback } from 'reactstrap';
 
 const LoginFormComponent = (props) => {
-  const initialState = { email: '', password: '' };
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  const checkValidity = (e) => {
-    e.preventDefault();
-    schema.isValid(state).then((valid) => { console.log(valid); } )
-  };
+  const { handleSubmit, handleChange, emailError, passwordError } = props;
 
   return(
-    <Form onSubmit={checkValidity}>
+    <Form onSubmit={handleSubmit}>
       <FormGroup>
         <Label for="email">Email</Label>
         <Input
@@ -36,8 +13,10 @@ const LoginFormComponent = (props) => {
           id="email"
           name="email"
           placeholder="Enter Email"
-          onChange={(e)=>{ dispatch({type: 'setEmail', value: e.target.value}) }}
+          onChange={handleChange}
+          invalid={emailError !== ''}
         />
+        <FormFeedback>{emailError}</FormFeedback>
       </FormGroup>
       <FormGroup>
         <Label for="password">Password</Label>
@@ -46,8 +25,10 @@ const LoginFormComponent = (props) => {
           name="password"
           id="password"
           placeholder="Enter password"
-          onChange={(e)=>{ dispatch({type: 'setPassword', value: e.target.value}) }}
+          onChange={handleChange}
+          invalid={passwordError !== ''}
         />
+        <FormFeedback>{passwordError}</FormFeedback>
       </FormGroup>
       <Button>Submit</Button>
     </Form>
