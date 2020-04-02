@@ -14,7 +14,7 @@ const LoginFormContainer = (props) => {
   const [state, dispatch] = useReducer(LoginReducer, initialState);
 
   let schema = yup.object().shape({
-    email: yup.string().email(),
+    email: yup.string().email().required(),
     password: yup.string().required(),
   });
 
@@ -24,15 +24,37 @@ const LoginFormContainer = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    schema.validate(state, { abortEarly: false})
+    let formData = new FormData(e.target);
+    let data = { email: formData.get('email'), password: formData.get('password') }
+    schema.validate(data, { abortEarly: false})
       .then(
         (value) => {
-          console.log(value);
+          try{
+            fetch(
+              "https://reqres.in/api/login",
+              {
+                "headers":{
+                  "accept":"*/*",
+                  "content-type":"application/json",
+                  "sec-fetch-dest":"empty",
+                  "sec-fetch-mode":"cors",
+                  "sec-fetch-site":"same-origin"
+                },
+                "body":JSON.stringify(value),
+                "method":"POST",
+                "mode":"cors"
+              }
+            ).then(response => {
+              return response.json();
+            }).then(response => console.log(response));
+          } catch(err) {
+            console.log(err);
+          }
         }
       )
       .catch(
         (err) => {
-          console.log(err);
+          err.inner.map((a) => dispatch({type: `${a.path}Error`, value: a.errors.join()}))
         }
       )
   };
