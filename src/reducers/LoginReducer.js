@@ -8,6 +8,8 @@ const LogininReducer = (state, action) => {
       return { ...state, emailError: action.value };
     case 'passwordError':
       return { ...state, passwordError: action.value };
+    case 'loading':
+      return { ...state, loading: action.value };
     default:
       throw new Error();
   }

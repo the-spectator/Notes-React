@@ -8,7 +8,8 @@ const LoginFormContainer = (props) => {
     email: '',
     password: '',
     emailError: '',
-    passwordError: ''
+    passwordError: '',
+    loading: false
   };
 
   const [state, dispatch] = useReducer(LoginReducer, initialState);
@@ -22,8 +23,13 @@ const LoginFormContainer = (props) => {
     dispatch({type: e.target.name, value: e.target.value})
   };
 
+  const setLoader = (loading) =>{
+    dispatch({type: 'loading', value: loading})
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoader(true);
     let formData = new FormData(e.target);
     let data = { email: formData.get('email'), password: formData.get('password') }
     schema.validate(data, { abortEarly: false})
@@ -45,26 +51,33 @@ const LoginFormContainer = (props) => {
                 "mode":"cors"
               }
             ).then(response => {
+              setLoader(false);
               return response.json();
             }).then(response => console.log(response));
           } catch(err) {
             console.log(err);
+            setLoader(false);
           }
         }
       )
       .catch(
         (err) => {
-          err.inner.map((a) => dispatch({type: `${a.path}Error`, value: a.errors.join()}))
+          err.inner.forEach(element => {
+            dispatch({type: `${element.path}Error`, value: element.message})
+          });
+          setLoader(false);
         }
       )
   };
 
+  console.log(`loading: ${state.loading}`)
   return(
     <LoginFormComponent
       handleSubmit={handleSubmit}
       handleChange={handleChange}
       emailError={state.emailError}
       passwordError={state.passwordError}
+      loading={state.loading}
     />
   )
 };

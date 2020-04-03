@@ -1,9 +1,26 @@
 import React from 'react';
-import { Label, Form, FormGroup, Button, Input, FormFeedback } from 'reactstrap';
+import { Label, Spinner, Form, FormGroup, Button, Input, FormFeedback } from 'reactstrap';
+import CustomInput from './CustomInput';
 
 const LoginFormComponent = (props) => {
-  const { handleSubmit, handleChange, emailError, passwordError } = props;
+  const {
+    handleSubmit,
+    handleChange,
+    emailError,
+    passwordError,
+    loading
+  } = props;
 
+  console.log(loading);
+  if(loading){
+    return (
+      <Spinner animation="border" role="status">
+        Loading...
+      </Spinner>
+    );
+  }
+
+  console.log("I am re-rendering");
   return(
     <Form onSubmit={handleSubmit}>
       <FormGroup>
@@ -31,6 +48,7 @@ const LoginFormComponent = (props) => {
         <FormFeedback>{passwordError}</FormFeedback>
       </FormGroup>
       <Button>Submit</Button>
+      <CustomInput helloFromOtherSide={passwordError}/>
     </Form>
   )
 };
